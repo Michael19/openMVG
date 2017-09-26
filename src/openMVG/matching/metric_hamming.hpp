@@ -15,6 +15,10 @@
 #include <cstdint>
 #include <type_traits>
 
+#ifdef _MSC_VER
+#include "nmmintrin.h"
+#endif
+
 // Brief:
 // Hamming distance count the number of bits in common between descriptors
 //  by using a XOR operation + a count.
@@ -50,9 +54,28 @@ struct Hamming
   template<typename U>
   static inline std::size_t constexpr popcnt(const U & rhs)
   {
-    static_assert(std::is_integral<U>::value, "U must be an integral type.");
+    static_assert(std::is_integral<U>::value && std::is_unsigned<T>::value,
+      "U must be an unsigned integral type.");
     return std::bitset<sizeof(U) * 8>(rhs).count();
   }
+
+#ifdef _MSC_VER
+  inline std::size_t constexpr popcnt(const uint32_t & rhs)
+  {
+    return _mm_popcnt_u32(rhs);
+  }
+
+  inline std::size_t constexpr popcnt(const uint64_t & rhs)
+  {
+#if __amd64__ || __x86_64__ || _WIN64 || _M_X64
+    return _mm_popcnt_u64(rhs);
+#else
+    // Process low and high bits
+    return popcnt(static_cast<std::uint32_t>(rhs)) +
+           popcnt(static_cast<std::uint32_t>(rhs >> 32));
+#endif
+  }
+#endif
 
   // Size must be equal to number of ElementType
   template <typename Iterator1, typename Iterator2>
@@ -64,8 +87,8 @@ struct Hamming
     {
       const uint64_t* pa = reinterpret_cast<const uint64_t*>(a);
       const uint64_t* pb = reinterpret_cast<const uint64_t*>(b);
-      size /= (sizeof(uint64_t)/sizeof(unsigned char));
-      for (size_t i = 0; i < size; ++i, ++pa, ++pb ) {
+      size /= (sizeof(uint64_t) / sizeof(uint8_t));
+      for (size_t i = 0; i < size; ++i, ++pa, ++pb) {
         result += popcnt(*pa ^ *pb);
       }
     }
@@ -73,8 +96,8 @@ struct Hamming
     {
       const uint32_t* pa = reinterpret_cast<const uint32_t*>(a);
       const uint32_t* pb = reinterpret_cast<const uint32_t*>(b);
-      size /= (sizeof(uint32_t)/sizeof(unsigned char));
-      for (size_t i = 0; i < size; ++i, ++pa, ++pb ) {
+      size /= (sizeof(uint32_t) / sizeof(uint8_t));
+      for (size_t i = 0; i < size; ++i, ++pa, ++pb) {
         result += popcnt(*pa ^ *pb);
       }
     }
