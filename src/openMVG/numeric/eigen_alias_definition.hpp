@@ -39,16 +39,16 @@ namespace std {                                                            \
     explicit vector(const allocator_type& a = allocator_type())            \
         : vector_base(a) {}                                                \
     template <typename InputIterator>                                      \
-    vector(InputIterator first, InputIterator last,                        \
+    explicit vector(InputIterator first, InputIterator last,                        \
            const allocator_type& a = allocator_type())                     \
         : vector_base(first, last, a) {}                                   \
     vector(const vector& c) = default;                                     \
     explicit vector(size_type num, const value_type& val = value_type())   \
         : vector_base(num, val) {}                                         \
-    vector(iterator start, iterator end) : vector_base(start, end) {}      \
+    explicit vector(iterator start, iterator end) : vector_base(start, end) {}      \
     vector& operator=(const vector& x) = default;                          \
     /* Add initializer list constructor support*/                          \
-    vector(initializer_list<__VA_ARGS__> list)                             \
+    vector(std::initializer_list<__VA_ARGS__> list)                             \
         : vector_base(list.begin(), list.end()) {}                         \
   };                                                                       \
 }  // namespace std
@@ -127,7 +127,7 @@ namespace openMVG
   /// 4xN matrix using double internal format
   using Mat4X = Eigen::Matrix<double, 4, Eigen::Dynamic>;
 
-  /// 9xN matrix using double internal format
+  /// Nx9 matrix using double internal format
   using MatX9 = Eigen::Matrix<double, Eigen::Dynamic, 9>;
 
   //-- Sparse Matrix (Column major, and row major)

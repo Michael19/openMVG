@@ -13,7 +13,6 @@
 
 #include "openMVG/cameras/Camera_Common.hpp"
 #include "openMVG/cameras/Camera_Pinhole.hpp"
-#include "openMVG/numeric/eigen_alias_definition.hpp"
 
 namespace openMVG
 {
@@ -133,7 +132,6 @@ class Pinhole_Intrinsic_Radial_K1 : public Pinhole_Intrinsic
     */
     Vec2 add_disto( const Vec2 & p ) const override
     {
-
       const double k1 = params_[0];
 
       const double r2 = p( 0 ) * p( 0 ) + p( 1 ) * p( 1 );
@@ -205,18 +203,17 @@ class Pinhole_Intrinsic_Radial_K1 : public Pinhole_Intrinsic
       if ( !(param & (int)Intrinsic_Parameter_Type::ADJUST_FOCAL_LENGTH)
           || param & (int)Intrinsic_Parameter_Type::NONE )
       {
-        constant_index.push_back(0);
+        constant_index.insert(constant_index.end(), 0);
       }
       if ( !(param & (int)Intrinsic_Parameter_Type::ADJUST_PRINCIPAL_POINT)
           || param & (int)Intrinsic_Parameter_Type::NONE )
       {
-        constant_index.push_back(1);
-        constant_index.push_back(2);
+        constant_index.insert(constant_index.end(), {1, 2});
       }
       if ( !(param & (int)Intrinsic_Parameter_Type::ADJUST_DISTORTION)
           || param & (int)Intrinsic_Parameter_Type::NONE )
       {
-        constant_index.push_back(3);
+        constant_index.insert(constant_index.end(), 3);
       }
       return constant_index;
     }
@@ -415,20 +412,17 @@ class Pinhole_Intrinsic_Radial_K3 : public Pinhole_Intrinsic
       if ( !(param & (int)Intrinsic_Parameter_Type::ADJUST_FOCAL_LENGTH)
           || param & (int)Intrinsic_Parameter_Type::NONE )
       {
-        constant_index.push_back(0);
+        constant_index.insert(constant_index.end(), 0);
       }
       if ( !(param & (int)Intrinsic_Parameter_Type::ADJUST_PRINCIPAL_POINT)
           || param & (int)Intrinsic_Parameter_Type::NONE )
       {
-        constant_index.push_back(1);
-        constant_index.push_back(2);
+        constant_index.insert(constant_index.end(), {1, 2});
       }
       if ( !(param & (int)Intrinsic_Parameter_Type::ADJUST_DISTORTION)
           || param & (int)Intrinsic_Parameter_Type::NONE )
       {
-        constant_index.push_back(3);
-        constant_index.push_back(4);
-        constant_index.push_back(5);
+        constant_index.insert(constant_index.end(), {3, 4, 5});
       }
       return constant_index;
     }

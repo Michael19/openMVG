@@ -24,16 +24,16 @@ namespace nomoko {
     private:
       // Generic clustering
       void findCommonPoints(const View& v1, const View& v2,
-          std::vector<size_t>& commonPts);
+          std::vector<size_t>& commonPts) const;
       // similarity measures
-      const float computeViewSimilaity(const View&, const View&);
-      Eigen::MatrixXf getSimilarityMatrix(std::map<size_t,size_t>&);
+      float computeViewSimilarity(const View&, const View&) const;
+      Eigen::MatrixXf getSimilarityMatrix(const std::map<size_t,size_t>&);
 
       // distance measures
       void getAllDistances();
-      float getDistanceMedian(const std::map<size_t,size_t> &);
+      float getDistanceMedian(const std::map<size_t,size_t> &) const;
       float computeViewDistance(const size_t& vId1, const size_t & vId2,
-              const float& medianDist);
+              const float& medianDist) const;
 
       void computeInformation();
 
@@ -57,7 +57,7 @@ namespace nomoko {
       }
 
       // AP clustering
-      void computeClustersAP(std::map<size_t,size_t>&, std::vector<std::vector<size_t> >&);
+      void computeClustersAP(std::map<size_t,size_t>&, std::vector<std::vector<size_t>>&);
 
       void clusterViews(std::map<size_t, size_t>& xId2vId, const size_t& minClustersize,
           const size_t& maxClusterSize);
@@ -66,13 +66,13 @@ namespace nomoko {
           const size_t& maxClusterSize);
 
       // export function
-      void exportToPLY(const std::string& plyFile, bool exportPoints = false);
+      void exportToPLY(const std::string& plyFile, bool exportPoints = false) const;
 
-      const std::vector<std::vector<size_t> >& getClusters() {
+      const std::vector<std::vector<size_t>>& getClusters() {
         return finalClusters;
       }
 
-      void setClusters(const std::vector<std::vector<size_t> > & clusters) {
+      void setClusters(const std::vector<std::vector<size_t>> & clusters) {
         finalClusters = clusters;
       }
 
@@ -86,7 +86,7 @@ namespace nomoko {
 
       Eigen::MatrixXf viewDists;
 
-      std::vector<std::vector<size_t > > finalClusters;
+      std::vector<std::vector<size_t >> finalClusters;
 
       const float kAngleSigma = M_PI / 6.f;
       const float kAngleSigma_2 = kAngleSigma * kAngleSigma;

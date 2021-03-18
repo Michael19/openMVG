@@ -1,3 +1,4 @@
+// This file is part of OpenMVG, an Open Multiple View Geometry C++ library.
 
 // Copyright (c) 2016 Romuald Perrot
 
@@ -200,7 +201,7 @@ void MainWindow::onTimerTick()
 {
   if ( ! m_vo_processor )
   {
-    if (m_timer )
+    if ( m_timer )
     {
       m_timer->stop();
     }

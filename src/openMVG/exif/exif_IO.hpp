@@ -26,6 +26,7 @@ class Exif_IO
 {
   public:
 
+    virtual ~Exif_IO() = default;
     /**
     * @brief Get image width
     * @return Width of the image (in pixel)
@@ -43,6 +44,34 @@ class Exif_IO
     * @return Focal of the lens when image was shot (in mm)
     */
     virtual float getFocal() const = 0;
+
+    /**
+    * @brief Get FocalLengthIn35mm (in mm)
+    * @return The equivalent focal length assuming a 35mm film camera, in mm.
+    */
+    virtual float getFocalLengthIn35mm() const = 0;
+
+    /**
+    * @brief Get FocalPlaneXResolution
+    * @return Number of pixels in the image width (X) direction per
+    *           FocalPlaneResolutionUnit on the camera focal plane.
+    */
+    virtual float getFocalPlaneXResolution() const = 0;
+
+    /**
+    * @brief Get FocalPlaneYResolution
+    * @return Number of pixels in the image height (Y) direction per
+    *           FocalPlaneResolutionUnit on the camera focal plane.
+    */
+    virtual float getFocalPlaneYResolution() const = 0;
+
+    /**
+    * @brief Get FocalPlaneResolutionUnit
+    *        Unit -> 2: inch, 3: centimeter, 4: millimeter, 5:micrometers.
+    * @return Indicates the unit for measuring FocalPlaneXResolution and
+    *          FocalPlaneYResolution.
+    */
+    virtual int getFocalPlaneResolutionUnit() const = 0;
 
     /**
     * @brief Get Brand of the camera
@@ -113,4 +142,3 @@ class Exif_IO
 } // namespace openMVG
 
 #endif // OPENMVG_EXIF_EXIF_IO_HPP
-

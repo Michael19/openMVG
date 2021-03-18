@@ -106,7 +106,7 @@ public:
   void operator()
   (
     const Octave & octave ,
-    std::vector< Keypoint > & keypoints
+    std::vector<Keypoint> & keypoints
   )
   {
     Compute_Gradients(octave);
@@ -117,7 +117,7 @@ public:
   void Compute_Orientations
   (
     const Octave & octave,
-    std::vector< Keypoint > & keypoints
+    std::vector<Keypoint> & keypoints
   )
   {
     Compute_Gradients(octave);
@@ -222,7 +222,7 @@ protected:
         const float sX = (si - x) / sigma;
         const float sY = (sj - y) / sigma;
         const float r2 = Square(sX) + Square(sY);
-        const float M = hypot(dx,dy) * exp(-r2/(2*Square(m_orientation_scale)));
+        const float M = hypot(dx, dy) * exp(-r2/(2*Square(m_orientation_scale)));
 
         /// Determine the bin index in the circular histogram
         const int gamma = ori_to_bin(ori, m_nb_orientation_histogram_bin);
@@ -457,16 +457,16 @@ protected:
 
               const int index = i*m_nb_split2d*m_nb_split_angle+j*m_nb_split_angle;
               // Contribution to left bin.
-              int k = ((int)gamma + m_nb_split_angle) % m_nb_split_angle;
-              descr[index+k]
+              const int k_left = ((int)gamma + m_nb_split_angle) % m_nb_split_angle;
+              descr[index+k_left]
                 += (1.0f-(gamma-floor(gamma)))
                    *(1.0f-std::abs((float)i-alpha))
                    *(1.0f-std::abs((float)j-beta))
                    *M;
 
               // Contribution to right bin.
-              k = ((int)gamma + 1 + m_nb_split_angle) % m_nb_split_angle;
-              descr[index+k]
+              const int k_right = ((int)gamma + 1 + m_nb_split_angle) % m_nb_split_angle;
+              descr[index+k_right]
                 += (1.0f-(floor(gamma)+1.f-gamma))
                   *(1.0f-std::abs((float)i-alpha))
                   *(1.0f-std::abs((float)j-beta))

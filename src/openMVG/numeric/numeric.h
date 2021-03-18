@@ -76,7 +76,7 @@ inline T clamp( const T & val, const T& min, const T & max )
 }
 
 /**
-* @brief Given a vector, computes it's cross product matrix
+* @brief Given a vector, computes its cross product matrix
 *
 * Cross product matrix is a helper matrix used to express cross product as a multiplication matrix \n
 * Given two vectors \f$a=\begin{pmatrix}a_x\\a_y\\a_z\end{pmatrix}\f$ and \f$b=\begin{pmatrix}b_x\\b_y\\b_z\end{pmatrix}\f$, cross product \f$a\times b\f$ is equal to :\n
@@ -297,11 +297,11 @@ inline double FrobeniusDistance( const TMat &A, const TMat &B )
 
 
 /**
-* @brief Compute similarity of matrices given cosine similarity mesure
+* @brief Compute similarity of matrices given cosine similarity measure
 * \f$ \cos( A , B ) = \frac{ A . B }{ \| A \|_2 \| B \|_2 } \f$
 * @param a First matrix
 * @param b Second matrix
-* @return cosine similarity mesure between the input matrices
+* @return cosine similarity measure between the input matrices
 */
 template<class TMat>
 double CosinusBetweenMatrices( const TMat &a, const TMat &b )
@@ -370,15 +370,17 @@ bool minMaxMeanMedian( DataInputIterator begin, DataInputIterator end,
   }
 
   std::vector<Type> vec_val( begin, end );
-  std::sort( vec_val.begin(), vec_val.end() );
-  min = vec_val[0];
-  max = vec_val[vec_val.size() - 1];
-  mean = std::accumulate( vec_val.begin(), vec_val.end(), Type( 0 ) )
+
+  // Get the median value:
+  const auto middle = vec_val.begin() + vec_val.size() / 2;
+  std::nth_element(vec_val.begin(), middle, vec_val.end());
+  median = *middle;
+  min = *std::min_element(vec_val.begin(), middle);
+  max = *std::max_element(middle, vec_val.end());
+  mean = std::accumulate( vec_val.cbegin(), vec_val.cend(), Type( 0 ) )
     / static_cast<Type>( vec_val.size() );
-  median = vec_val[vec_val.size() / 2];
   return true;
 }
-
 
 /**
 * @brief Display to standard output min, max, mean and median value of input range
@@ -410,9 +412,9 @@ void minMaxMeanMedian( DataInputIterator begin, DataInputIterator end )
  ** @param nb_split Number of desired split
  ** @param d_range Output splitted range
  **/
-template < typename T >
+template <typename T>
 void SplitRange( const T range_start , const T range_end , const int nb_split ,
-                 std::vector< T > & d_range )
+                 std::vector<T > & d_range )
 {
   const T range_length = range_end - range_start;
   if (range_length < nb_split )
